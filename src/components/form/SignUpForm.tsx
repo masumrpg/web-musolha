@@ -13,7 +13,7 @@ import {
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
@@ -32,30 +32,27 @@ const formSchema = z
     username: z
       .string()
       .min(1, "Username dibutuhkan")
-      .regex(
-        RegExp("^[a-z0-9_]+$"),
-        "Tidak mengandung spasi,karakter unik dan huruf kapital",
-      )
+      .regex(RegExp("^[a-z0-9_]+$"), "Hanya huruf kecil")
       .min(5, "Minimal 5 karakter"),
     password: z
       .string()
       .min(1, "Password dibutuhkan")
-      .regex(RegExp("^[^ ]+$"), "Tidak boleh ada spasi")
-      .min(8, "Password harus memiliki 8 karakter"),
+      .regex(RegExp("^[^ ]+$"), "Dilarang spasi")
+      .min(8, "Minimal 8 karakter"),
     confirmPassword: z
       .string()
       .min(1, "Konfirm password dibutuhkan")
-      .regex(RegExp("^[^ ]+$"), "Tidak boleh ada spasi")
-      .min(8, "Konfirm password harus memiliki 8 karakter"),
+      .regex(RegExp("^[^ ]+$"), "Dilarang spasi")
+      .min(8, "Minimal 8 karakter"),
     name: z
       .string()
       .regex(RegExp("^[a-zA-Z\\s]+$"), "Hanya huruf")
-      .min(3, "Nama minimal 3 karakter"),
+      .min(3, "Minimal 3 karakter"),
     dob: z.date(),
     village: z
       .string()
       .regex(RegExp("^[a-zA-Z\\s]+$"), "Hanya huruf")
-      .min(4, "Nama desa minimal 4 karakter"),
+      .min(4, "Minimal 4 karakter"),
     rtRw: z
       .string()
       .regex(RegExp("^[0-9/]+$"), "Hanya angka dan spasi")
@@ -64,8 +61,8 @@ const formSchema = z
     phone: z
       .string()
       .regex(RegExp("^[0-9]+$"), "No HP harus angka")
-      .min(10, "Setidaknya 10 karakter")
-      .max(14, "Maksimal 14 karakter"),
+      .min(10, "Minimal 10 angka")
+      .max(14, "Maksimal 14 angka"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -209,6 +206,20 @@ export default function SignUpForm() {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      classNames={{
+                        caption_dropdowns: "flex",
+                        dropdown:
+                          "z-50 text-sm font-medium font overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+                        dropdown_month:
+                          "flex justify-between items-center gap-2 text-sm font-medium font",
+                        dropdown_year:
+                          "flex justify-between items-center gap-2 text-sm font-medium font",
+                        dropdown_icon: "hidden",
+                        vhidden: "hidden",
+                      }}
+                      captionLayout="dropdown-buttons"
+                      fromYear={1945}
+                      toYear={2025}
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
@@ -275,7 +286,7 @@ export default function SignUpForm() {
       <p className="text-center text-sm text-gray-600 mt-2">
         Jika kamu sudah mempunyai akun, kesini&nbsp;
         <Link className="text-blue-500 hover:underline" href="/signin">
-          Sign in
+          Masuk
         </Link>
       </p>
     </Form>

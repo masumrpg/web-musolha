@@ -20,10 +20,7 @@ const FormSchema = z.object({
   username: z
     .string()
     .min(1, "Username dibutuhkan")
-    .regex(
-      RegExp("^[a-z0-9_]+$"),
-      "Tidak mengandung spasi,karakter unik dan huruf kapital",
-    )
+    .regex(RegExp("^[a-z0-9_]+$"), "Hanya huruf kecil dan angka")
     .min(5, "Minimal 5 karakter"),
   password: z
     .string()

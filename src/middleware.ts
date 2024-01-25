@@ -1,7 +1,12 @@
 import { auth } from "@/lib/auth";
 
 export default auth((req) => {
-  console.log("Route: ",req.nextUrl.pathname);
+  const isSignIn = !!req.auth;
+  const { nextUrl } = req;
+
+  if (nextUrl.pathname === "/signin" || "/" || "/signup") return null;
+
+  if (!isSignIn && nextUrl.pathname !== "/signin") return Response.redirect(new URL("/signin", nextUrl));
 });
 
 
